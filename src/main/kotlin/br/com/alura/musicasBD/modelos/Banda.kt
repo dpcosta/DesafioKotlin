@@ -5,4 +5,7 @@ class Banda(
     val descricao: String = "Descrição da banda",
     val id: Int = 0,
 ) {
+    override fun toString(): String {
+        return "$nome ($id)"
+    }
 }

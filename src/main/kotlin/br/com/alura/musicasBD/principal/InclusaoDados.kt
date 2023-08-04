@@ -1,6 +1,9 @@
 package br.com.alura.musicasBD.principal
 
+import br.com.alura.musicasBD.dados.AlbumDAO
 import br.com.alura.musicasBD.dados.Banco
+import br.com.alura.musicasBD.dados.BandaDAO
+import br.com.alura.musicasBD.dados.MusicaDAO
 import br.com.alura.musicasBD.modelos.Album
 import br.com.alura.musicasBD.modelos.Banda
 import br.com.alura.musicasBD.modelos.Musica
@@ -8,20 +11,33 @@ import br.com.alura.musicasBD.modelos.Musica
 fun main() {
     val manager = Banco.getEntityManager()
 
-    val ironMaiden = Banda("Iron Maiden")
+    // Bandas
+    val bandaDAO = BandaDAO(manager)
 
-    // álbum Killers
-    val killers = Album("Killers", ironMaiden)
-    val wrathchild = Musica("Wrathchild", 3000, killers)
-    val murders = Musica("Murders in the rue Morgue", 4000, killers)
+    bandaDAO.adicionar(Banda("Iron Maiden"))
+    val ironMaidenBD = bandaDAO.recuperarPeloID(1)
 
-    // álbum Piece of Mind
-    val pieceOfMind = Album("Piece of Mind", ironMaiden)
-    val revelations = Musica("Revelations", 3000, pieceOfMind)
-    val flightOfIcarus = Musica("Flight of Icarus", 3000, pieceOfMind)
-    val theTrooper = Musica("The Trooper", 4000, pieceOfMind)
+    // Álbuns
+    val albumDAO = AlbumDAO(manager)
 
-    // persistir banda, álbuns e músicas
+    albumDAO.adicionar(Album("Killers", ironMaidenBD))
+    val killersBD = albumDAO.recuperarPeloID(1)
+
+    albumDAO.adicionar(Album("Piece of Mind", ironMaidenBD))
+    val pieceOfMindBD = albumDAO.recuperarPeloID(2)
+
+    // Músicas
+    val musicaDAO = MusicaDAO(manager)
+
+    val wrathchild = Musica("Wrathchild", 3000, killersBD)
+    val murders = Musica("Murders in the rue Morgue", 4000, killersBD)
+
+    val revelations = Musica("Revelations", 3000, pieceOfMindBD)
+    val flightOfIcarus = Musica("Flight of Icarus", 3000, pieceOfMindBD)
+    val theTrooper = Musica("The Trooper", 4000, pieceOfMindBD)
+
+    val musicas = listOf<Musica>(wrathchild, murders, revelations, flightOfIcarus, theTrooper)
+    musicas.forEach { m -> musicaDAO.adicionar(m) }
 
     manager.close()
 }

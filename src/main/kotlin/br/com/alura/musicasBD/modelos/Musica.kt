@@ -6,4 +6,7 @@ class Musica(
     val album: Album = Album(),
     val id: Int = 0,
 ) {
+    override fun toString(): String {
+        return "Música $titulo ($id) com duração (ms): $duracaoMilissegundos do álbum $album"
+    }
 }
